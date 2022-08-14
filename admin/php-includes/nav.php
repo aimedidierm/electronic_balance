@@ -41,6 +41,9 @@
                             <a href="products.php"><i class="fa fa-table fa-fw"></i> Products</a>
                         </li>
                         <li>
+                            <a href="sales.php"><i class="fa fa-shopping-cart fa-fw"></i> Sales</a>
+                        </li>
+                        <li>
                             <a href="settings.php"><i class="fa fa-gear fa-fw"></i> Settings</a>
                         </li>
                         <li>

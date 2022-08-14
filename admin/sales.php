@@ -28,7 +28,7 @@ if(isset($_POST['save'])){
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Admin - products</title>
+    <title>Admin - sales</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -85,14 +85,15 @@ if(isset($_POST['save'])){
                                     <tr>
                                         <th>N</th>
                                         <th>Name</th>
+                                        <th>Quantity(kg)</th>
                                         <th>Price</th>
+                                        <th>Payed</th>
                                         <th>Time</th>
-                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $sql = "SELECT * FROM products";
+                                    $sql = "SELECT s.product_id,s.weight,s.price,s.payed,s.time,p.id,p.name FROM sales AS s JOIN products AS p ON s.product_id=p.id";
                                     $stmt = $db->prepare($sql);
                                     $stmt->execute();
                                     if ($stmt->rowCount() > 0) {
@@ -102,46 +103,19 @@ if(isset($_POST['save'])){
                                     <tr class="gradeA">
                                         <td><?php echo $count;?></td>
                                         <td><?php echo $row['name'];?></td>
+                                        <td><?php echo $row['weight'];?></td>
                                         <td><?php echo $row['price'];?></td>
+                                        <td><?php echo $row['payed'];?></td>
                                         <td class="center"><?php echo $row['time'];?></td>
-                                        <td><form method="post"><button type="submit" class="btn btn-danger" id="<?php echo $row["id"];$sid=$row["id"]; ?>" name="delete"><span class="glyphicon glyphicon-trash"></span> Delete</button></form></td>
                                     </tr>
                                     <?php
                                         $count++;
-                                        }
-                                    }
-                                    if(isset($_POST['delete'])){
-                                        $sql ="DELETE FROM products WHERE id = ?";
-                                        $stm = $db->prepare($sql);
-                                        if ($stm->execute(array($sid))) {
-                                            print "<script>alert('Product deleted');window.location.assign('products.php')</script>";
-                                
-                                        } else {
-                                            print "<script>alert('Delete fail');window.location.assign('products.php')</script>";
                                         }
                                     }
                                     ?>
                                 </tbody>
                             </table>
                             <div class="panel-body">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <h1>Add new product</h1>
-                                <form method="post">
-                                    <div class="form-group">
-                                        <label>Names</label>
-                                        <input class="form-control" type="text" name="names" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Price</label>
-                                        <input class="form-control" type="number" name="price" required>
-                                    </div>
-                                    <div class="form-group">
-                                    <button type="submit" class="btn btn-success" name="save"><span class="glyphicon glyphicon-check"></span> Save</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
                     </div>
                         </div>
                         <!-- /.panel-body -->
