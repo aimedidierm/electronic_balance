@@ -88,12 +88,13 @@ if(isset($_POST['save'])){
                                         <th>Quantity(kg)</th>
                                         <th>Price</th>
                                         <th>Payed</th>
+                                        <th>Client</th>
                                         <th>Time</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $sql = "SELECT s.product_id,s.weight,s.price,s.payed,s.time,p.id,p.name FROM sales AS s JOIN products AS p ON s.product_id=p.id";
+                                    $sql = "SELECT s.product_id,s.weight,s.price,s.payed,s.time,s.client,p.id,p.name FROM sales AS s JOIN products AS p ON s.product_id=p.id";
                                     $stmt = $db->prepare($sql);
                                     $stmt->execute();
                                     if ($stmt->rowCount() > 0) {
@@ -106,6 +107,7 @@ if(isset($_POST['save'])){
                                         <td><?php echo $row['weight'];?></td>
                                         <td><?php echo $row['price'];?></td>
                                         <td><?php echo $row['payed'];?></td>
+                                        <td><?php echo $row['client'];?></td>
                                         <td class="center"><?php echo $row['time'];?></td>
                                     </tr>
                                     <?php

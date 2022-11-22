@@ -92,7 +92,7 @@ if(isset($_POST['save'])){
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $sql = "SELECT * FROM products";
+                                    $sql = "SELECT * FROM products limit 5";
                                     $stmt = $db->prepare($sql);
                                     $stmt->execute();
                                     if ($stmt->rowCount() > 0) {
@@ -133,7 +133,7 @@ if(isset($_POST['save'])){
                                         <input class="form-control" type="text" name="names" required>
                                     </div>
                                     <div class="form-group">
-                                        <label>Price</label>
+                                        <label>Price/Kg</label>
                                         <input class="form-control" type="number" name="price" required>
                                     </div>
                                     <div class="form-group">
