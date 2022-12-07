@@ -1,10 +1,9 @@
 #include <LiquidCrystal.h>
 #include <Keypad.h>
-
-
+#include <ArduinoJson.h>
 const int rs = A0, en = A1, d4 = A2, d5 = A3, d6 = A4, d7 = A5;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
-
+String data="";
 const byte ROWS = 4;
 const byte COLS = 4;
 char newNum[12]="",amount[12]="",number[12]="";
@@ -23,12 +22,13 @@ char keys[ROWS][COLS] = {
 byte rowPins[ROWS] = {7, 6, 3, 2};
 byte colPins[COLS] = {8, 9, 10};
 int mi=1;
+float mass=0;
 Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
-int product=0;
+int product=0,price=0,k=0,totalam=0;
 void setup() {
   // put your setup code here, to run once:
   lcd.begin(16, 2);
-
+  Serial.begin(9600);
 }
 
 void loop() {
@@ -104,11 +104,33 @@ void sproduct(){
   }
   }
 void select(){
+  Serial.println((String)"product="+product);
+  while(k==0){
+    if (Serial.available() > 0) {
+    data = Serial.readStringUntil('\n');
+    Serial.println(data);
+    DynamicJsonBuffer jsonBuffer;
+    JsonObject& root = jsonBuffer.parseObject(data);
+      if (root["p"]) {
+      price = root["p"];
+      break;
+      }
+    }
+  }
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Product price");
+  lcd.setCursor(0, 1);
+  lcd.print(price);
+  lcd.print("Rwf/Kg");
+  delay(3000);
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Place product");
   lcd.setCursor(0, 1);
   lcd.print("on the balance");
+  mass=1;
+  totalam=5000;
   delay(4000);
   enteramount();
   }
@@ -128,10 +150,10 @@ void enteramount(){
     lcd.setCursor(0,1);
     int key = keypad.getKey();
     if (key!=NO_KEY && key!='#' && key!='*'){
-        newNum[j] = key;
-        newNum[j+1]='\0';   
+        amount[j] = key;
+        amount[j+1]='\0';   
         j++;
-        lcd.print(newNum);
+        lcd.print(amount);
     }
     if (key=='#'&& j>0)
     {
@@ -163,8 +185,15 @@ void enterphone(){
     }
     if (key=='#'&& j>0)
     {
-      sproduct();
+      ending();
       }
       delay(100);
       }
   }
+  void ending(){
+    Serial.println((String)"product="+product+"&phone="+number+"&total="+totalam+"&amount="+amount+"&mass="+mass);
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("Bill sent");
+      sproduct();
+    }
