@@ -191,9 +191,10 @@ void enterphone(){
       }
   }
   void ending(){
-    Serial.println((String)"product="+product+"&phone="+number+"&total="+totalam+"&amount="+amount+"&mass="+mass);
+    Serial.println((String)"bill="+product+"product="+product+"&phone="+number+"&total="+totalam+"&amount="+amount+"&mass="+mass);
     lcd.clear();
     lcd.setCursor(0,0);
     lcd.print("Bill sent");
+    delay(4000);
       sproduct();
     }
