@@ -124,15 +124,19 @@ void select(){
   lcd.print(price);
   lcd.print("Rwf/Kg");
   delay(3000);
+  mass=1;
+  totalam=mass*price;
   lcd.clear();
   lcd.setCursor(0, 0);
-  lcd.print("Place product");
+  lcd.print(mass);
   lcd.setCursor(0, 1);
-  lcd.print("on the balance");
-  mass=1;
-  totalam=5000;
-  delay(4000);
-  enteramount();
+  lcd.print(totalam);
+  int key = keypad.getKey();
+  if (key=='#') {
+    enteramount();
+    }
+  select();
+  delay(500);
   }
 void enteramount(){
   int i=0,j=0,m=0,x=0,s=0,k=0;

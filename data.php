@@ -6,8 +6,8 @@ require 'php-includes/connect.php';
 include_once("vendor/autoload.php");
 use Yvesniyo\IntouchSms\SmsSimple;
 //product price
-if(isset($_POST['product'])){
-    $product=$_POST['product'];
+if(isset($_REQUEST['product'])){
+    $product=$_REQUEST['product'];
     $query = "SELECT * FROM products WHERE id = ?";
     $stmt = $db->prepare($query);
     $stmt->execute(array($product));
@@ -16,12 +16,12 @@ if(isset($_POST['product'])){
     $data = array('p' =>$price,'a' =>'1'); 
     echo $response = json_encode($data)."\n";
 }
-if(isset($_POST['bill'])){
-    $product=$_POST['product'];
-    $phone=$_POST['phone'];
-    $total=$_POST['total'];
-    $amount=$_POST['amount'];
-    $mass=$_POST['mass'];
+if(isset($_REQUEST['bill'])){
+    $product=$_REQUEST['product'];
+    $phone=$_REQUEST['phone'];
+    $total=$_REQUEST['total'];
+    $amount=$_REQUEST['amount'];
+    $mass=$_REQUEST['mass'];
     $left=$total-$amount;
     //product name
     $query = "SELECT * FROM products WHERE id = ?";
