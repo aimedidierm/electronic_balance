@@ -104,7 +104,8 @@ void sproduct(){
   }
   }
 void select(){
-  Serial.println((String)"product="+product);
+  //Serial.println((String)"product="+product);
+  Serial.println((String)"{'product':" + product + "}");
   while(k==0){
     if (Serial.available() > 0) {
     data = Serial.readStringUntil('\n');
@@ -126,16 +127,21 @@ void select(){
   delay(3000);
   mass=1;
   totalam=mass*price;
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print(mass);
-  lcd.setCursor(0, 1);
-  lcd.print(totalam);
-  int key = keypad.getKey();
-  if (key=='#') {
-    enteramount();
+  int my=0;
+  while(my==0){
+    //my test codes
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print(mass);
+    lcd.print(" Kg");
+    lcd.setCursor(0, 1);
+    lcd.print(totalam);
+    lcd.print(" Rwf");
+    int key = keypad.getKey();
+    if (key=='#') {
+      enteramount();
+      }
     }
-  select();
   delay(500);
   }
 void enteramount(){
@@ -195,7 +201,9 @@ void enterphone(){
       }
   }
   void ending(){
-    Serial.println((String)"bill="+product+"product="+product+"&phone="+number+"&total="+totalam+"&amount="+amount+"&mass="+mass);
+    //Serial.println((String)"bill="+product+"product="+product+"&phone="+number+"&total="+totalam+"&amount="+amount+"&mass="+mass);
+    
+    Serial.println((String)"{'bill':" + product + ", '" + "product':" + product + ", '" + "phone':'" + number + "', '" + "total':'" + totalam + "', '" + "amount':'" + amount + "', '" + "mass':'" + mass + "}");
     lcd.clear();
     lcd.setCursor(0,0);
     lcd.print("Bill sent");
