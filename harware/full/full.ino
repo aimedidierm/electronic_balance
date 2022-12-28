@@ -1,11 +1,10 @@
-#include <Wire.h> 
-#include <LiquidCrystal_I2C.h>
+#include <LiquidCrystal.h>
 #include <Keypad.h>
 #include <ArduinoJson.h>
 #include <HX711_ADC.h>
 #if defined(ESP8266)|| defined(ESP32) || defined(AVR)
 #include <EEPROM.h>
-LiquidCrystal_I2C lcd(0x27,20,4);
+//LiquidCrystal_I2C lcd(0x27,20,4);
 #endif
 //pins:
 const int HX711_dout = 4; //mcu > HX711 dout pin
@@ -17,7 +16,7 @@ HX711_ADC LoadCell(HX711_dout, HX711_sck);
 const int calVal_eepromAdress = 0;
 unsigned long t = 0;
 const int rs = A0, en = A1, d4 = A2, d5 = A3, d6 = A4, d7 = A5;
-//LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 String data = "";
 const byte ROWS = 4;
 const byte COLS = 4;
@@ -37,20 +36,21 @@ char keys[ROWS][COLS] = {
 byte rowPins[ROWS] = {7, 6, 3, 2};
 byte colPins[COLS] = {8, 9, 10};
 int mi = 1;
-float mass = 0;
+float mass = 0,i =0;
 Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 int product = 0, price = 0, k = 0, totalam = 0;
 void setup() {
-  // put your setup code here, to run once:
-  lcd.init();                      // initialize the lcd 
-  lcd.init();
-  // Print a message to the LCD.
-  lcd.backlight();
+  lcd.begin(16, 2);
   Serial.begin(9600);
   LoadCell.begin();
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Smart electronic");
+  lcd.setCursor(0, 1);
+  lcd.print(" balance");
   //LoadCell.setReverseOutput(); //uncomment to turn a negative output value to positive
   float calibrationValue; // calibration value (see example file "Calibration.ino")
-  calibrationValue = 54.61; // uncomment this if you want to set the calibration value in the sketch
+  calibrationValue = 34.45; // uncomment this if you want to set the calibration value in the sketch
 #if defined(ESP8266)|| defined(ESP32)
   //EEPROM.begin(512); // uncomment this if you use ESP8266/ESP32 and want to fetch the calibration value from eeprom
 #endif
@@ -67,6 +67,7 @@ void setup() {
     LoadCell.setCalFactor(calibrationValue); // set calibration value (float)
     Serial.println("Startup is complete");
   }
+  delay(3000);
 }
 
 void loop() {
@@ -174,17 +175,18 @@ void balance() {
     // get smoothed value from the dataset:
     if (newDataReady) {
       if (millis() > t + serialPrintInterval) {
-        float i = LoadCell.getData();
-        Serial.print("Load_cell output val: ");
+        i = LoadCell.getData();
+        Serial.println("Load_cell output val: ");
+        Serial.println(i);
         lcd.clear();
         lcd.setCursor(0, 0);
-        totalam = i * price;
+        totalam = (i * price)/1000;
         lcd.print("Mass:");
-        lcd.print(i);
+        lcd.println(i);
         lcd.print("g");
         lcd.setCursor(0, 1);
         lcd.print(totalam);
-        lcd.print("Rwf/g");
+        lcd.print("Rwf");
         newDataReady = 0;
         t = millis();
       }
@@ -204,6 +206,7 @@ void balance() {
     if (key == '#') {
       enteramount();
     }
+    balance();
   }
 void enteramount() {
   int i = 0, j = 0, m = 0, x = 0, s = 0, k = 0;
@@ -264,7 +267,7 @@ void enterphone() {
 void ending() {
   //Serial.println((String)"bill="+product+"product="+product+"&phone="+number+"&total="+totalam+"&amount="+amount+"&mass="+mass);
 
-  Serial.println((String)"{'bill':" + product + ", '" + "product':" + product + ", '" + "phone':'" + number + "', '" + "total':'" + totalam + "', '" + "amount':'" + amount + "', '" + "mass':'" + mass + "}");
+  Serial.println((String)"{'bill':" + product + ", '" + "product':" + product + ", '" + "phone':'" + number + "', '" + "total':" + totalam + ", '" + "amount':" + amount + ", '" + "mass':" + i + "}");
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Bill sent");

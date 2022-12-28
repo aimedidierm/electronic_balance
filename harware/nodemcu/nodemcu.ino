@@ -9,6 +9,7 @@ const char* password = "balance123";
 String serverName = "http://137.184.232.255/electronic_balance/data.php";
 //String serverName = "http://192.168.43.76/electronic_balance/data.php";
 
+String serverPath = serverName;
 void setup() {
   Serial.begin(9600); 
 
@@ -35,7 +36,6 @@ void loop() {
       String data = Serial.readStringUntil('\n');
       DynamicJsonBuffer jsonBuffer;
       JsonObject& root = jsonBuffer.parseObject(data);
-      String serverPath = serverName;
       if(root["bill"]){
       String bill = root["bill"];
       String product = root["product"];
@@ -43,11 +43,11 @@ void loop() {
       String total = root["total"];
       String amount = root["amount"];
       String mass = root["mass"];
-      String serverPath = serverName + "?bill="+bill+"product="+product+"&phone="+phone+"&total="+total+"&amount="+amount+"&mass="+mass;
+      serverPath = serverName + "?bill="+bill+"product="+product+"&phone="+phone+"&total="+total+"&amount="+amount+"&mass="+mass;
       }
       if(root["product"]){
       String product = root["product"];
-      String serverPath = serverName + "?product="+product;
+      serverPath = serverName + "?product="+product;
       }
       Serial.println(serverPath);
       http.begin(client, serverPath);
