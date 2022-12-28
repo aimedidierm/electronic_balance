@@ -6,16 +6,6 @@ require 'php-includes/connect.php';
 include_once("vendor/autoload.php");
 use Yvesniyo\IntouchSms\SmsSimple;
 //product price
-if(isset($_REQUEST['product'])){
-    $product=$_REQUEST['product'];
-    $query = "SELECT * FROM products WHERE id = ?";
-    $stmt = $db->prepare($query);
-    $stmt->execute(array($product));
-    $rows = $stmt->fetch(PDO::FETCH_ASSOC);
-    $price=$rows['price'];
-    $data = array('p' =>$price,'a' =>'1'); 
-    echo $response = json_encode($data)."\n";
-}
 if(isset($_REQUEST['bill'])){
     $product=$_REQUEST['product'];
     $phone=$_REQUEST['phone'];
@@ -43,5 +33,15 @@ if(isset($_REQUEST['bill'])){
         ->apiUrl("www.intouchsms.co.rw/api/sendsms/.json")
         ->callBackUrl("");
     print_r($sms->send());
+}
+if(isset($_REQUEST['product'])&&(($_REQUEST['bill']))==null){
+    $product=$_REQUEST['product'];
+    $query = "SELECT * FROM products WHERE id = ?";
+    $stmt = $db->prepare($query);
+    $stmt->execute(array($product));
+    $rows = $stmt->fetch(PDO::FETCH_ASSOC);
+    $price=$rows['price'];
+    $data = array('p' =>$price,'a' =>'1'); 
+    echo $response = json_encode($data)."\n";
 }
 ?>
