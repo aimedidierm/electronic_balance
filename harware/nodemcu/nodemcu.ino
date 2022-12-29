@@ -43,10 +43,10 @@ void loop() {
       String total = root["total"];
       String amount = root["amount"];
       String mass = root["mass"];
-      serverPath = serverName + "?bill="+bill+"product="+product+"&phone="+phone+"&total="+total+"&amount="+amount+"&mass="+mass;
+      serverPath = serverName + "?bill="+bill+"&product="+product+"&phone="+phone+"&total="+total+"&amount="+amount+"&mass="+mass;
       }
-      if(root["product"]){
-      String product = root["product"];
+      if(root["productt"]){
+      String product = root["productt"];
       serverPath = serverName + "?product="+product;
       }
       Serial.println(serverPath);

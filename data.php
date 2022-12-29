@@ -34,8 +34,8 @@ if(isset($_REQUEST['bill'])){
         ->callBackUrl("");
     print_r($sms->send());
 }
-if(isset($_REQUEST['product'])&&(($_REQUEST['bill']))==null){
-    $product=$_REQUEST['product'];
+if(isset($_REQUEST['productt'])){
+    $product=$_REQUEST['productt'];
     $query = "SELECT * FROM products WHERE id = ?";
     $stmt = $db->prepare($query);
     $stmt->execute(array($product));

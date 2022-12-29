@@ -148,8 +148,8 @@ void sproduct() {
 }
 void select() {
   //Serial.println((String)"product="+product);
-  Serial.println((String)"{'product':" + product + "}");
-  while (k == 0) {
+  Serial.println((String)"{'productt':" + product + "}");
+  /*while (k == 0) {
     if (Serial.available() > 0) {
       data = Serial.readStringUntil('\n');
       Serial.println(data);
@@ -160,7 +160,9 @@ void select() {
         balance();
       }
     }
-  }
+  }*/
+  price=random(1000,2500);
+  balance();
   delay(500);
 }
 void balance() {
