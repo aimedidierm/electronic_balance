@@ -23,7 +23,7 @@ if(isset($_REQUEST['bill'])){
     $stm = $db->prepare($sql);
     $stm->execute(array($product,$mass,$total,$left,$phone));
     /** @var \Yvesniyo\IntouchSms\SmsSimple */
-    $messi="Dear customer you have bought ".$mass."Kg of ".$productname." you have paid ".$amount." Rwf you left with ".$left." Rwf, Thank you!";
+    $messi="Dear customer you have bought ".$mass."g of ".$productname." you have paid ".$amount." Rwf you left with ".$left." Rwf, Thank you!";
     $sms = new SmsSimple();
     $sms->recipients([$phone])
         ->message($messi)
